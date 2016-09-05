@@ -14,8 +14,52 @@ package com.palmg.core.cluster.config;
 
 /**
  * 集群相关配置
+ * 
  * @author chkui
  */
 public class ClusterConfig {
+	private boolean enabled;// 集群启停标识
 
+	private NetWorkConfig netWorkConfig; // 组网相关配置
+
+	/**
+	 * 判断是否启用集群
+	 * 
+	 * @return [true|false] 启用|停用
+	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	/**
+	 * 设置是否启用集群
+	 * 
+	 * @param enabled
+	 *            标识是否启用集群 [true|fasle]
+	 * @return {@link ClusterConfig}
+	 */
+	public ClusterConfig setEnabled(boolean enabled) {
+		this.enabled = enabled;
+		return this;
+	}
+
+	/**
+	 * 获取集群网络相关配置
+	 * 
+	 * @return {@link NetWorkConfig}
+	 */
+	public NetWorkConfig getNetWorkConfig() {
+		return netWorkConfig;
+	}
+
+	/**
+	 * 设置集群网络相关配置
+	 * 
+	 * @param {@link NetWorkConfig}
+	 * @return {@link ClusterConfig}
+	 */
+	public ClusterConfig setNetWorkConfig(NetWorkConfig netWorkConfig) {
+		this.netWorkConfig = netWorkConfig;
+		return this;
+	}
 }

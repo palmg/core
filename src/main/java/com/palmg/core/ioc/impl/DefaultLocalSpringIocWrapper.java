@@ -12,22 +12,47 @@
  */
 package com.palmg.core.ioc.impl;
 
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.palmg.core.config.def.DefaultConf;
 import com.palmg.core.ioc.PalmgIoc;
+import com.palmg.core.main.config.DefaultConf;
 import com.palmg.utility.properties.PropertiesLoadUtil;
 
+/**
+ * <h3>spring容器包裹类</h3>
+ * @author chkui
+ */
 public class DefaultLocalSpringIocWrapper implements PalmgIoc {
+	private static final Logger LOG = LoggerFactory.getLogger(DefaultLocalSpringIocWrapper.class);
 
 	private ApplicationContext springContext;
-	
-	public DefaultLocalSpringIocWrapper(final String springXmlPath){
-		PropertiesLoadUtil.classPathLoad(DefaultConf.DEF_CONFIG_PROPERTIES_PATH);
-		springContext = new ClassPathXmlApplicationContext(springXmlPath);
+
+	public DefaultLocalSpringIocWrapper() {
+		build(Optional.<String> empty());
 	}
-	
+
+	public DefaultLocalSpringIocWrapper(final String springXmlPath) {
+		build(Optional.of(springXmlPath));
+	}
+
+	private void build(final Optional<String> option) {
+		final String defloadPath = Optional.of(PropertiesLoadUtil.classPathLoad(DefaultConf.DEF_CONFIG_PROPERTIES_PATH))// 读取properties
+				.map(p -> p.getProperty("default.spring.loadPath"))// 读取配置路径加载字符串
+				.get();
+
+		if (option.isPresent()) {
+			springContext = new ClassPathXmlApplicationContext(option.get(), defloadPath);
+		} else {
+			springContext = new ClassPathXmlApplicationContext(defloadPath);
+		}
+		LOG.debug("Init sping context success!");
+	}
+
 	@Override
 	public Object getBean(String beanName) {
 		return springContext.getBean(beanName);
@@ -35,14 +60,12 @@ public class DefaultLocalSpringIocWrapper implements PalmgIoc {
 
 	@Override
 	public <T> T getBean(Class<T> beanType) {
-		// TODO Auto-generated method stub
-		return null;
+		return springContext.getBean(beanType);
 	}
 
 	@Override
 	public <T> T getBean(String beanName, Class<T> beanType) {
-		// TODO Auto-generated method stub
-		return null;
+		return springContext.getBean(beanName, beanType);
 	}
 
 	@Override
@@ -74,5 +97,4 @@ public class DefaultLocalSpringIocWrapper implements PalmgIoc {
 		// TODO Auto-generated method stub
 
 	}
-
 }

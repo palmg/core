@@ -12,12 +12,19 @@
  */
 package com.palmg.core.ioc;
 
+import com.palmg.core.ioc.impl.DefaultLocalSpringIocWrapper;
+
 /**
  * <3>IOC容器接口</h3>
+ * 
  * @author chkui
  */
 public interface PalmgIoc {
 
+	public static PalmgIoc build(){
+		return new DefaultLocalSpringIocWrapper();
+	}
+	
 	Object getBean(String beanName);
 
 	<T> T getBean(Class<T> beanType);

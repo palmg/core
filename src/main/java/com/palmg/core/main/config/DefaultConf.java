@@ -10,7 +10,7 @@
  * You may elect to redistribute this code under this licenses and copyright.
  * ------------------------------------------------------
  */
-package com.palmg.core.config.def;
+package com.palmg.core.main.config;
 
 /**
  * 全局默认配置
@@ -22,4 +22,14 @@ public class DefaultConf {
 	 * {@value}
 	 */
 	final public static String DEF_CONFIG_PROPERTIES_PATH = "configs/default_conf.properties";
+	
+	/**
+	 * 标识未定义字符串:{@value}
+	 */
+	final public static String DEF_TAG_STRING_NULL= "NaNEOF";
+	
+	/**
+	 * 未定义数字
+	 */
+	final public static int DEF_TAG_NUMBER_NULL = -1;
 }

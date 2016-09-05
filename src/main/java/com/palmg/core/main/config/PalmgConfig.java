@@ -10,7 +10,7 @@
  * You may elect to redistribute this code under this licenses and copyright.
  * ------------------------------------------------------
  */
-package com.palmg.core.config;
+package com.palmg.core.main.config;
 
 import com.palmg.core.bus.config.BusConfig;
 import com.palmg.core.cluster.config.ClusterConfig;
