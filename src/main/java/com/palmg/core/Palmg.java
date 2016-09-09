@@ -15,10 +15,11 @@ package com.palmg.core;
 import com.palmg.cluster.PalmgCluster;
 import com.palmg.core.bus.consumer.PalmgConsumer;
 import com.palmg.core.bus.publisher.PalmgPulisher;
+import com.palmg.core.cron.PalmgCron;
 import com.palmg.core.ioc.PalmgIoc;
+import com.palmg.core.main.AaronConfigure;
 import com.palmg.core.main.config.PalmgConfig;
 import com.palmg.core.main.impl.DefaultToolkitImpl;
-import com.palmg.core.schdule.PalmgCron;
 
 /**
  * Palmg全局toolkit
@@ -28,10 +29,17 @@ import com.palmg.core.schdule.PalmgCron;
 public interface Palmg{
 
 	public static Palmg build() {
-		return DefaultToolkitImpl.Instance;
+		AaronConfigure config = AaronConfigure.Instance;
+		config.setCluster(false);// no cluster
+		return buildConfig(false, null, null);
 	}
 
-	public static Palmg build(final String springXmlPath) {
+	public static Palmg build(final String... springXmlPath) {
+		// TODO
+		return null;
+	}
+
+	public static Palmg buildCluster(final String... springXmlPath) {
 		// TODO
 		return null;
 	}
@@ -39,6 +47,13 @@ public interface Palmg{
 	public static Palmg build(final PalmgConfig config) {
 		// TODO
 		return null;
+	}
+	
+	static Palmg buildConfig(boolean isCluster, String[] springXmlPaths, PalmgConfig palmgConfig){
+		AaronConfigure config = AaronConfigure.Instance;
+		config.setCluster(isCluster);// no cluster
+		config.setSpringXmlPath(springXmlPaths);// 设置spring配置
+		return DefaultToolkitImpl.Instance;
 	}
 
 	PalmgConsumer getConsumer();

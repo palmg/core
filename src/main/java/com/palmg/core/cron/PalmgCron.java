@@ -10,7 +10,7 @@
  * You may elect to redistribute this code under this licenses and copyright.
  * ------------------------------------------------------
  */
-package com.palmg.core.schdule;
+package com.palmg.core.cron;
 
 /**
  * <p>设置Palmg定时任务的接口</p>

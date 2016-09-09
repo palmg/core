@@ -13,7 +13,6 @@
 package com.palmg.core.bus.config;
 
 import com.palmg.core.bus.enums.BusRunType;
-import com.palmg.utility.annotation.Fluently;
 
 /**
  * <h3>数据传输总线相关配置</h3>

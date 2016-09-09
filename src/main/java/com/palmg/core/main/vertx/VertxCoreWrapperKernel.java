@@ -23,9 +23,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.palmg.core.bus.consumer.config.ConsumerOptions;
+import com.palmg.core.bus.consumer.config.SendOptions;
 import com.palmg.core.main.AaronKernel;
 import com.palmg.core.main.annotation.Assembly;
 import com.palmg.utility.async.Callback;
+import com.palmg.utility.async.CallbackResult;
 import com.palmg.utility.async.Msg;
 
 import io.vertx.core.AbstractVerticle;
@@ -38,8 +40,6 @@ import io.vertx.core.Vertx;
  * <p>
  * 
  * </p>
- * TODO description
- * 
  * @author chkui
  */
 public final class VertxCoreWrapperKernel implements AaronKernel {
@@ -120,4 +120,15 @@ public final class VertxCoreWrapperKernel implements AaronKernel {
 		return this;
 	}
 
+	@Override
+	public <T> AaronKernel send(String address, Object obj, CallbackResult<T> callback, SendOptions options) {
+		// TODO Auto-generated method stub
+		return this;
+	}
+
+	@Override
+	public <T> AaronKernel publish(String address, Object obj, SendOptions options) {
+		// TODO Auto-generated method stub
+		return this;
+	}
 }
