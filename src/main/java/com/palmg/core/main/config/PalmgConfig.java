@@ -14,6 +14,7 @@ package com.palmg.core.main.config;
 
 import com.palmg.core.bus.config.BusConfig;
 import com.palmg.core.cluster.config.ClusterConfig;
+import com.palmg.core.ioc.config.IocConfig;
 
 /**
  * palmg启动配置
@@ -26,7 +27,10 @@ public class PalmgConfig {
 
 	// 交互总线配置
 	private BusConfig busConfig;
-
+	
+	// 容器配置
+	private IocConfig iocConfig;
+	
 	/**
 	 * 获取集群配置
 	 * @return
@@ -61,5 +65,21 @@ public class PalmgConfig {
 	public PalmgConfig setBusConfig(BusConfig busConfig) {
 		this.busConfig = busConfig;
 		return this;
+	}
+
+	/**
+	 * 获取容器相关配置
+	 * @return
+	 */
+	public IocConfig getIocConfig() {
+		return iocConfig;
+	}
+
+	/**
+	 * 设置容器相关配置
+	 * @param iocConfig 容器配置
+	 */
+	public void setIocConfig(IocConfig iocConfig) {
+		this.iocConfig = iocConfig;
 	}
 }

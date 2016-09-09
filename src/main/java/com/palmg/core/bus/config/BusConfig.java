@@ -31,32 +31,46 @@ import com.palmg.core.bus.enums.BusRunType;
  */
 public class BusConfig {
 
+	/**
+	 * 设置开发环境默认的线程检查阻塞时间{@value}
+	 */
+	final public static int DEV_CORE_THREAD_BLOCK_CHECK_INTERVAL = 999999999;
+
+	/**
+	 * 设置在开发环境默认核心线程轮训检查时间{@value}
+	 */
+	final public static int DEV_MAX_EVENT_LOOP_EXECUTETIME = 999999999;
+
+	/**
+	 * 设置在开发环境警告时间{@value}
+	 */
+	final public static long DEV_WARNUBG_EXCEPTION_TIME = 999999999999999999L;
+
 	// 环境运行类型
 	private BusRunType busRunType = BusRunType.Developer;
 
-	// 核心线程个数  eventLoopPoolSize
-	private int coreThreadPoolSize;
+	// 核心线程个数 eventLoopPoolSize。默认为CPU核心数×2
+	private int coreThreadPoolSize = 2 * Runtime.getRuntime().availableProcessors();
 
 	// 工作线程个数 WorkerPoolSize
-	private int workerThreadPoolSize;
+	private int workerThreadPoolSize = 20;
 
 	// 代码异步执行的阻塞线程，用于调度内部总线执行情况
-	private int internalBlockingPoolSize;
+	private int internalBlockingPoolSize = 20;
 
-	// 核心线程阻塞检查周期。系统会根据设定的时间周期性检测某个coreThread线程是否执行了太久的时间，单位ms。 blockedThreadCheckInterval
-	private int coreThreadBlockedCheckInterval;
-	
-	// 检查核心线程的等待返回时间，如果在这个指定的时间核心线程没有任何响应，则会输出一个警告日志，单位ms。用于检查一个核心线程是否被阻塞。 work maxEventLoopExecuteTime
-	private int maxCoreThreadExecuteTime;
+	// 核心线程阻塞检查周期。系统会根据设定的时间周期性检测某个coreThread线程是否执行了太久的时间，单位ms。
+	// blockedThreadCheckInterval
+	private int coreThreadBlockedCheckInterval = DEV_CORE_THREAD_BLOCK_CHECK_INTERVAL;
 
-	// 工作线程阻塞检查周期，效果同coreThreadBlockedCheckInterval。 maxWorkerExecuteTime
-	private int workerThreadBlockCheckInterval;
-	
+	// 检查核心线程的等待返回时间，如果在这个指定的时间核心线程没有任何响应，则会输出一个警告日志，单位ms。用于检查一个核心线程是否被阻塞。 work
+	// maxEventLoopExecuteTime
+	private int maxCoreThreadExecuteTime = DEV_MAX_EVENT_LOOP_EXECUTETIME;
+
 	// 检查工作线程的等待返回时间，效果类似maxCoreThreadExecuteTime 。maxWorkerExecuteTime
-	private int maxWorkerThreadExecuteTime;
-	
+	private long maxWorkerThreadExecuteTime = 60L * 1000 * 1000000;
+
 	// 异常日志的输出阀值时间，如果阻塞超过这个时间，则输出异常日志
-	private long warningExceptionTime;
+	private long warningExceptionTime = DEV_WARNUBG_EXCEPTION_TIME;
 
 	public BusRunType getBusRunType() {
 		return busRunType;
@@ -101,5 +115,29 @@ public class BusConfig {
 	public BusConfig setCoreThreadBlockedCheckInterval(int coreThreadBlockedCheckInterval) {
 		this.coreThreadBlockedCheckInterval = coreThreadBlockedCheckInterval;
 		return this;
+	}
+
+	public int getMaxCoreThreadExecuteTime() {
+		return maxCoreThreadExecuteTime;
+	}
+
+	public void setMaxCoreThreadExecuteTime(int maxCoreThreadExecuteTime) {
+		this.maxCoreThreadExecuteTime = maxCoreThreadExecuteTime;
+	}
+
+	public long getMaxWorkerThreadExecuteTime() {
+		return maxWorkerThreadExecuteTime;
+	}
+
+	public void setMaxWorkerThreadExecuteTime(long maxWorkerThreadExecuteTime) {
+		this.maxWorkerThreadExecuteTime = maxWorkerThreadExecuteTime;
+	}
+
+	public long getWarningExceptionTime() {
+		return warningExceptionTime;
+	}
+
+	public void setWarningExceptionTime(long warningExceptionTime) {
+		this.warningExceptionTime = warningExceptionTime;
 	}
 }

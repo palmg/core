@@ -1,46 +1,51 @@
+/*
+ * Copyright palmg(www.palmg.com)
+ * ------------------------------------------------------
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of Apache License v2.0 which accompanies this distribution.
+ * 
+ *     The Apache License v2.0 is available at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * You may elect to redistribute this code under this licenses and copyright.
+ * ------------------------------------------------------
+ */
 package com.palmg.core.main;
 
-import java.util.Optional;
+import java.util.Objects;
 
-import com.palmg.core.cluster.config.ClusterConfig;
+import com.palmg.core.main.config.PalmgConfig;
+import com.palmg.utility.annotation.Fluently;
 
+/**
+ * 容器全局配置
+ * 
+ * @author chenkui
+ */
 public enum AaronConfigure {
 	Instance;
 
-	private boolean cluster;// 标记是否集群
+	private PalmgConfig palmgConfig;// 设置全局配置
 
-	private ClusterConfig clusterConfig;// 集群配置
-
-	private Optional<String[]> springXmlPaths;// xml配置路径
-
-	private AaronConfigure() {
-		springXmlPaths = Optional.empty();
+	/**
+	 * 设置全局配置
+	 * 
+	 * @return
+	 */
+	public PalmgConfig getPalmgConfig() {
+		return palmgConfig;
 	}
 
-	public boolean isCluster() {
-		return cluster;
-	}
-
-	public AaronConfigure setCluster(boolean cluster) {
-		this.cluster = cluster;
-		return this;
-	}
-
-	public ClusterConfig getClusterConfig() {
-		return clusterConfig;
-	}
-
-	public AaronConfigure setClusterConfig(ClusterConfig clusterConfig) {
-		this.clusterConfig = clusterConfig;
-		return this;
-	}
-
-	public Optional<String[]> getSpringXmlPath() {
-		return springXmlPaths;
-	}
-
-	public AaronConfigure setSpringXmlPath(String... springXmlPaths) {
-		this.springXmlPaths = Optional.ofNullable(springXmlPaths);
+	@Fluently
+	/**
+	 * 设置全局配置
+	 * 
+	 * @param palmgConfig
+	 *            全局配置参数
+	 */
+	public AaronConfigure setPalmgConfig(PalmgConfig palmgConfig) {
+		Objects.requireNonNull(palmgConfig);
+		this.palmgConfig = palmgConfig;
 		return this;
 	}
 }

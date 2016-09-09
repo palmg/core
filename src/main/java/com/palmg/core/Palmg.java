@@ -12,6 +12,8 @@
  */
 package com.palmg.core;
 
+import java.util.Objects;
+
 import com.palmg.cluster.PalmgCluster;
 import com.palmg.core.bus.consumer.PalmgConsumer;
 import com.palmg.core.bus.publisher.PalmgPulisher;
@@ -35,8 +37,8 @@ public interface Palmg{
 	}
 
 	public static Palmg build(final String... springXmlPath) {
-		// TODO
-		return null;
+		Objects.requireNonNull(springXmlPath);
+		return buildConfig(false, springXmlPath, null);
 	}
 
 	public static Palmg buildCluster(final String... springXmlPath) {
@@ -53,6 +55,7 @@ public interface Palmg{
 		AaronConfigure config = AaronConfigure.Instance;
 		config.setCluster(isCluster);// no cluster
 		config.setSpringXmlPath(springXmlPaths);// 设置spring配置
+		
 		return DefaultToolkitImpl.Instance;
 	}
 

@@ -19,8 +19,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 
 import com.palmg.core.bus.consumer.config.ConsumerOptions;
 import com.palmg.core.bus.consumer.config.SendOptions;
@@ -35,11 +38,13 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 
 @Assembly
+@Lazy(false)
 /**
  * <h3>Vertx的包装实现类，对外提供所有的Vertx的基础功能</h3>
  * <p>
  * 
  * </p>
+ * 
  * @author chkui
  */
 public final class VertxCoreWrapperKernel implements AaronKernel {
@@ -47,7 +52,8 @@ public final class VertxCoreWrapperKernel implements AaronKernel {
 
 	private Vertx vertx;
 
-	public VertxCoreWrapperKernel() {
+	@PostConstruct
+	public void init() {
 		CompletableFuture<Void> future = new CompletableFuture<>();
 		new Thread(() -> {
 			vertx = Vertx.vertx();
@@ -58,7 +64,7 @@ public final class VertxCoreWrapperKernel implements AaronKernel {
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
 			LOG.error("init vertx error!", e);
 		}
-		
+
 		vertx.deployVerticle(new AbstractVerticle() {
 		});
 	}
@@ -76,13 +82,13 @@ public final class VertxCoreWrapperKernel implements AaronKernel {
 				// 根据类型创建一个consumer
 				switch (options.getLocalType()) {
 				case Local:
-					vertx.eventBus().<T> localConsumer(address, handler -> {
+					vertx.eventBus().<T>localConsumer(address, handler -> {
 						callback.call(new DefaultMsgImpl<T>().setvertxMsg(handler));
 					});
 					break;
 				case Cluseter:
 				default:
-					vertx.eventBus().<T> consumer(address, handler -> {
+					vertx.eventBus().<T>consumer(address, handler -> {
 						callback.call(new DefaultMsgImpl<T>().setvertxMsg(handler));
 					});
 					break;
