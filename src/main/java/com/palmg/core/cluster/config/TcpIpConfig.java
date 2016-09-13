@@ -19,9 +19,10 @@ import com.palmg.utility.annotation.Nullable;
 
 /**
  * TCP/IP组网配置
+ * 
  * @author chkui
  */
-public class TcpIpNetWorkConfig extends NetConfig {
+public class TcpIpConfig {
 	/**
 	 * 默认TCP/IP探查连接超时时间：{@value}
 	 */
@@ -32,9 +33,6 @@ public class TcpIpNetWorkConfig extends NetConfig {
 	 */
 	public static final String[] CONNECT_NODE = { "localhost" };
 
-	// 组网类型
-	private NetType networkType = NetType.TcpIp;
-
 	// 当前节点加入集群之前优先启动的节点
 	private String[] requireNode;
 
@@ -43,16 +41,6 @@ public class TcpIpNetWorkConfig extends NetConfig {
 
 	// 当前连接超时时间
 	private int connectTimout = CONNECT_TIMEOUT;
-
-	@Override
-	/**
-	 * 获取网络连接类型
-	 * 
-	 * @return {@link NetWorkType}
-	 */
-	public NetType getNetType() {
-		return networkType;
-	}
 
 	@Nullable
 	/**
@@ -72,7 +60,7 @@ public class TcpIpNetWorkConfig extends NetConfig {
 	 *            IP列表
 	 * @return
 	 */
-	public TcpIpNetWorkConfig setRequireNode(String... requireNode) {
+	public TcpIpConfig setRequireNode(String... requireNode) {
 		this.requireNode = Objects.requireNonNull(requireNode);
 		return this;
 	}
@@ -94,7 +82,7 @@ public class TcpIpNetWorkConfig extends NetConfig {
 	 *            连接的IP清单
 	 * @return
 	 */
-	public TcpIpNetWorkConfig setConnectNode(String... connectNode) {
+	public TcpIpConfig setConnectNode(String... connectNode) {
 		this.connectNode = Objects.requireNonNull(connectNode);
 		return this;
 	}
@@ -116,7 +104,7 @@ public class TcpIpNetWorkConfig extends NetConfig {
 	 *            连接超时时间，单位MS。
 	 * @return
 	 */
-	public TcpIpNetWorkConfig setConnectTimout(int connectTimout) {
+	public TcpIpConfig setConnectTimout(int connectTimout) {
 		if (1 > connectTimout) {
 			throw new IllegalArgumentException("portCount must be greater than 1");
 		}

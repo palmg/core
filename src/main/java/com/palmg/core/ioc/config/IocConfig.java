@@ -12,51 +12,93 @@
  */
 package com.palmg.core.ioc.config;
 
-import java.util.Arrays;
-import java.util.List;
-
-import com.palmg.utility.annotation.Fluently;
+import java.util.Objects;
 
 /**
- * IOC容器相关的配置，为容器的初始化提供支持
+ * IOC容器相关的配置，为容器的初始化提供支持。 在palmg中，只要是服么JSR330规范的反向依赖注入机制都可以实现
+ * 
  * @author chenkui
  *
  */
-public class IocConfig {
+final public class IocConfig {
+	public enum IocType {
+		/**
+		 * spring容器
+		 */
+		Spring,
+		/**
+		 * google guice容器
+		 */
+		Guice
+	}
+
+	// 容器类型
+	private IocType iocType = IocType.Spring;
+
+	// spring容器配置
+	private SpringIocConfig springIocConfig;
 	
-	private List<String> springXmlPaths;//spring的加载路径
-	
-	public IocConfig(){
-		this.springXmlPaths = Arrays.asList("configs/ioc/default/ioc-default.xml");
+	// guice容器配置
+	private GuiceIocConfig guiceIocConfig;
+
+	public IocConfig() {
+		springIocConfig = new SpringIocConfig();
+		
+		guiceIocConfig = new GuiceIocConfig();
 	}
 
 	/**
-	 * 获取当前spring的启动路径
+	 * 获取Ioc容器类型,标记当前使用的容器
+	 * 
 	 * @return
 	 */
-	public List<String> getSpringXmlPaths() {
-		return springXmlPaths;
+	public IocType getIocType() {
+		return iocType;
 	}
 
-	@Fluently
 	/**
-	 * 增加spring的扫描路径
-	 * @param springXmlPaths 要添加的路径
-	 * @return this
+	 * 设置当前IOC容器的使用类型
+	 * 
+	 * @param iocType
+	 * @return {@link IocConfig}
 	 */
-	public IocConfig addSpringXmlPaths(String... springXmlPaths){
-		this.springXmlPaths.addAll(Arrays.asList(springXmlPaths));
+	public IocConfig setIocType(IocType iocType) {
+		//TODO 暂时未完成Guice功能
+		//this.iocType = Objects.requireNonNull(iocType);
 		return this;
 	}
-	
-	@Fluently
+
 	/**
-	 * 设置当前spring的启动路径
-	 * @param springXmlPaths 要设置的路径
-	 * @return this
+	 * 获取spring的IOC容器
+	 * 
+	 * @return {@link SpringIocConfig}
 	 */
-	public IocConfig setSpringXmlPaths(List<String> springXmlPaths) {
-		this.springXmlPaths = springXmlPaths;
-		return this;
+	public SpringIocConfig getSpringIocConfig() {
+		return springIocConfig;
+	}
+
+	/**
+	 * 设置spring的IOC容器配置
+	 * 
+	 * @param springIocConfig
+	 */
+	public void setSpringIocConfig(SpringIocConfig springIocConfig) {
+		this.springIocConfig = Objects.requireNonNull(springIocConfig);
+	}
+
+	/**
+	 * 获取
+	 * @return
+	 */
+	public GuiceIocConfig getGuiceIocConfig() {
+		return guiceIocConfig;
+	}
+
+	/**
+	 * 
+	 * @param guiceIocConfig
+	 */
+	public void setGuiceIocConfig(GuiceIocConfig guiceIocConfig) {
+		this.guiceIocConfig = guiceIocConfig;
 	}
 }

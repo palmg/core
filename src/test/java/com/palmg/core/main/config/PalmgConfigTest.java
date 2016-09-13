@@ -9,9 +9,12 @@ import org.junit.Test;
 import com.palmg.core.bus.config.BusConfig;
 import com.palmg.core.bus.enums.BusRunType;
 import com.palmg.core.cluster.config.ClusterConfig;
+import com.palmg.core.cluster.config.MulticastConfig;
 import com.palmg.core.cluster.config.NetConfig;
-import com.palmg.core.cluster.config.TcpIpNetWorkConfig;
+import com.palmg.core.cluster.config.TcpIpConfig;
+import com.palmg.core.ioc.config.GuiceIocConfig;
 import com.palmg.core.ioc.config.IocConfig;
+import com.palmg.core.ioc.config.SpringIocConfig;
 
 /**
  * 测试用于保证当初的的config功能设置被正确执行。
@@ -62,18 +65,12 @@ public class PalmgConfigTest {
 		Assert.assertNull(netConfig.getInterfaces());
 		Assert.assertNull(netConfig.getPublicAddress());
 
-		switch (netConfig.getNetType()) {
-		case TcpIp:
-			TcpIpNetWorkConfig ipConfig = (TcpIpNetWorkConfig) netConfig;
-			Assert.assertEquals(TcpIpNetWorkConfig.CONNECT_TIMEOUT, ipConfig.getConnectTimeOut());
-			Assert.assertEquals(Arrays.asList(TcpIpNetWorkConfig.CONNECT_NODE),
-					Arrays.asList(ipConfig.getConnectNode()));
-			break;
-		case Multicast:
-		default:
-			Assert.assertTrue(false);
-			break;
-		}
+		TcpIpConfig tcpIpConfig = netConfig.getTcpIpConfig();
+		Assert.assertEquals(TcpIpConfig.CONNECT_TIMEOUT, tcpIpConfig.getConnectTimeOut());
+		Assert.assertEquals(Arrays.asList(TcpIpConfig.CONNECT_NODE), Arrays.asList(tcpIpConfig.getConnectNode()));
+		
+		MulticastConfig multicastConfig = netConfig.getMulticastConfig();
+		Assert.assertNotNull(multicastConfig);
 
 		BusConfig busConfig = palmgConfig.getBusConfig();
 		Assert.assertEquals(BusRunType.Developer, busConfig.getBusRunType());
@@ -84,6 +81,10 @@ public class PalmgConfigTest {
 		Assert.assertEquals(BusConfig.WORKER_THREAD_POOL_SIZE, busConfig.getWorkerThreadPoolSize());
 
 		IocConfig iocConfig = palmgConfig.getIocConfig();
-		Assert.assertTrue(iocConfig.getSpringXmlPaths().contains("configs/ioc/default/ioc-default.xml"));
+		SpringIocConfig springIocConfig = iocConfig.getSpringIocConfig();
+		Assert.assertTrue(springIocConfig.getSpringXmlPaths().contains("configs/ioc/default/ioc-default.xml"));
+		
+		GuiceIocConfig guiceIocConfig = iocConfig.getGuiceIocConfig();
+		Assert.assertNotNull(guiceIocConfig);
 	}
 }

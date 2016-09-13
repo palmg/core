@@ -17,12 +17,14 @@ import java.util.Objects;
 import com.palmg.utility.annotation.Fluently;
 import com.palmg.utility.annotation.Nullable;
 
+import io.netty.handler.codec.http.multipart.MemoryAttribute;
+
 /**
  * 网络配置接口配置
  * 
  * @author chkui
  */
-abstract public class NetConfig {
+public class NetConfig {
 
 	/**
 	 * 默认集群心跳频率：{@value}
@@ -61,6 +63,15 @@ abstract public class NetConfig {
 		Multicast// 组播协议组网
 	}
 
+	// 组网类型
+	private NetType netType = NetType.TcpIp;
+
+	// tcp/ip配置
+	private TcpIpConfig tcpIpConfig;
+
+	// 组播协议配置
+	private MulticastConfig multicastConfig;
+
 	// 集群心跳间隔，单位ms
 	private long pingInterval = PING_INTERVAL;
 
@@ -85,12 +96,74 @@ abstract public class NetConfig {
 	// 对外接口
 	private int[] interfaces;
 
+	public NetConfig() {
+		this.tcpIpConfig = new TcpIpConfig();
+		this.multicastConfig = new MulticastConfig();
+	}
+
 	/**
 	 * 获取网络连接类型
 	 * 
 	 * @return {@link NetWorkType}
 	 */
-	public abstract NetType getNetType();
+	public NetType getNetType() {
+		return this.netType;
+	};
+
+	/**
+	 * 设置网络运行类型
+	 * 
+	 * @param netType
+	 * @return {@link NetConfig}
+	 */
+	public NetConfig setNetType(NetType netType) {
+		// TODO 目前支持Tcp/Ip模式
+		// this.netType = Objects.requireNonNull(netType);
+		return this;
+	}
+
+	/**
+	 * 获取tcp/ip相关配置累
+	 * 
+	 * @return {@link TcpIpNetConfig}
+	 */
+	public TcpIpConfig getTcpIpConfig() {
+		return tcpIpConfig;
+	}
+
+	/**
+	 * 设置TCP/IP配置
+	 * 
+	 * @param {@link
+	 * 			TcpIpNetConfig}
+	 * @return {@link NetConfig}
+	 */
+	public NetConfig setTcpIpConfig(TcpIpConfig tcpIpConfig) {
+		this.tcpIpConfig = Objects.requireNonNull(tcpIpConfig);
+		return this;
+	}
+
+	/**
+	 * 获取组播协议相关配置
+	 * 
+	 * @return
+	 */
+	public MulticastConfig getMulticastConfig() {
+		return multicastConfig;
+	}
+
+	@Fluently
+	/**
+	 * 设置组播协议相关配置
+	 * 
+	 * @param {@link
+	 * 			MulticastConfig}
+	 * @return {@link NetConfig}
+	 */
+	public NetConfig setMulticastConfig(MulticastConfig multicastConfig) {
+		this.multicastConfig = Objects.requireNonNull(multicastConfig);
+		return this;
+	}
 
 	/**
 	 * 获取集群节点之间的心跳间隔时间，单位ms。

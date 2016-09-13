@@ -50,6 +50,13 @@ public interface Palmg{
 		return null;
 	}
 	
+	/**
+	 * Palmg construct method。
+	 * @param isCluster Cluster flag.[true|false].
+	 * @param springXmlPaths PalmgIoc init springXmlPath
+	 * @param palmgConfig
+	 * @return
+	 */
 	static Palmg buildConfig(boolean isCluster, String[] springXmlPaths, PalmgConfig palmgConfig){
 		AaronConfigure config = AaronConfigure.Instance;
 		config.setPalmgConfig(palmgConfig);

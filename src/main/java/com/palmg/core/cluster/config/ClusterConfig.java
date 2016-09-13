@@ -27,7 +27,7 @@ public class ClusterConfig {
 	private NetConfig netConfig; // 组网相关配置
 
 	public ClusterConfig() {
-		netConfig = new TcpIpNetWorkConfig();// 默认使用TCP/IP连接
+		netConfig = new NetConfig();// 默认使用TCP/IP连接
 	}
 
 	/**
