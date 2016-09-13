@@ -15,6 +15,8 @@ package com.palmg.core.ioc.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.palmg.core.bus.config.BusConfig;
+import com.palmg.core.cluster.config.ClusterConfig;
 import com.palmg.core.main.AaronConfigure;
 
 @Configuration
@@ -26,9 +28,25 @@ public class DefaultIOCGlobalConfig {
 	
 	/**
 	 * 获取容器相关配置
-	 * @return
+	 * @return {@link IocConfig}
 	 */
 	public @Bean IocConfig getIocConfig(){
 		return AaronConfigure.Instance.getPalmgConfig().getIocConfig();
+	}
+	
+	/**
+	 * 获取数据总线相关配置
+	 * @return {@link BusConfig}
+	 */
+	public @Bean BusConfig getBusConfig(){
+		return AaronConfigure.Instance.getPalmgConfig().getBusConfig();
+	}
+	
+	/**
+	 * 获取集群相关配置
+	 * @return
+	 */
+	public @Bean ClusterConfig getClusterConfig(){
+		return AaronConfigure.Instance.getPalmgConfig().getClusterConfig();
 	}
 }

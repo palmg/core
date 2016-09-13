@@ -12,12 +12,18 @@
  */
 package com.palmg.core.main.config;
 
+import java.util.Objects;
+
 import com.palmg.core.bus.config.BusConfig;
 import com.palmg.core.cluster.config.ClusterConfig;
 import com.palmg.core.ioc.config.IocConfig;
+import com.palmg.utility.annotation.Fluently;
 
 /**
- * palmg启动配置
+ * <h3>palmg配置对象</h3>
+ * <p>
+ * PalmgConfig中包含了所有的运行相关配置。其中包含集群配置、交互事件配置、容器配置。
+ * </p>
  * 
  * @author chkui
  */
@@ -27,59 +33,78 @@ public class PalmgConfig {
 
 	// 交互总线配置
 	private BusConfig busConfig;
-	
+
 	// 容器配置
 	private IocConfig iocConfig;
-	
+
+	public PalmgConfig() {
+		iocConfig = new IocConfig();// 创建容器配置
+
+		busConfig = new BusConfig();// 创建总线配置
+
+		clusterConfig = new ClusterConfig();// 创建集群配置
+	}
+
 	/**
 	 * 获取集群配置
-	 * @return
+	 * 
+	 * @return {@link ClusterConfig}
 	 */
 	public ClusterConfig getClusterConfig() {
 		return clusterConfig;
 	}
 
+	@Fluently
 	/**
 	 * 替换集群配置
-	 * @param clusterConfig
-	 * @return
+	 * 
+	 * @param {@link ClusterConfig}
+	 * @return {@link PalmgConfig}
 	 */
 	public PalmgConfig setClusterConfig(ClusterConfig clusterConfig) {
-		this.clusterConfig = clusterConfig;
+		this.clusterConfig = Objects.requireNonNull(clusterConfig);
 		return this;
 	}
 
 	/**
 	 * 获取总线配置
-	 * @return
+	 * 
+	 * @return {@link BusConfig}
 	 */
 	public BusConfig getBusConfig() {
 		return busConfig;
 	}
 
+	@Fluently
 	/**
 	 * 替换传输总线配置
-	 * @param busConfig
-	 * @return
+	 * 
+	 * @param {@link BusConfig}
+	 * @return {@link PalmgConfig}
 	 */
 	public PalmgConfig setBusConfig(BusConfig busConfig) {
-		this.busConfig = busConfig;
+		this.busConfig = Objects.requireNonNull(busConfig);
 		return this;
 	}
 
 	/**
 	 * 获取容器相关配置
-	 * @return
+	 * 
+	 * @return {@link IocConfig}
 	 */
 	public IocConfig getIocConfig() {
 		return iocConfig;
 	}
 
+	@Fluently
 	/**
 	 * 设置容器相关配置
-	 * @param iocConfig 容器配置
+	 * 
+	 * @param {@link IocConfig}
+	 *            
 	 */
-	public void setIocConfig(IocConfig iocConfig) {
-		this.iocConfig = iocConfig;
+	public PalmgConfig setIocConfig(IocConfig iocConfig) {
+		this.iocConfig = Objects.requireNonNull(iocConfig);
+		return this;
 	}
 }

@@ -12,138 +12,115 @@
  */
 package com.palmg.core.cluster.config;
 
-import com.palmg.core.cluster.config.NetWorkConfig.NetWorkType;
+import java.util.Objects;
+
+import com.palmg.utility.annotation.Fluently;
+import com.palmg.utility.annotation.Nullable;
 
 /**
  * TCP/IP组网配置
- * 
  * @author chkui
  */
-public class TcpIpNetWorkConfig {
+public class TcpIpNetWorkConfig extends NetConfig {
+	/**
+	 * 默认TCP/IP探查连接超时时间：{@value}
+	 */
+	public static final int CONNECT_TIMEOUT = 5;
+
+	/**
+	 * 默认连接节点：{@value}
+	 */
+	public static final String[] CONNECT_NODE = { "localhost" };
+
 	// 组网类型
-	private NetWorkType networkType = NetWorkType.TcpIp;
+	private NetType networkType = NetType.TcpIp;
 
-	// 当前节点加入集群之前优先启动的Ip
-	private String[] requireIp;
+	// 当前节点加入集群之前优先启动的节点
+	private String[] requireNode;
 
-	// 当前集群节点要连接的Ip地址
-	private String[] connectIp;
+	// 当前集群节点要连接的节点
+	private String[] connectNode = CONNECT_NODE;
 
 	// 当前连接超时时间
-	private int connectTimeOut;
+	private int connectTimout = CONNECT_TIMEOUT;
 
-	// 公网地址
-	private String publicAddress;
-
-	// 本地组网端口
-	private int port;
-
-	// 本地组网端口的可增长数
-	private int portCount;
-
-	// 是否开启本地组网端口自动增长
-	private boolean portIncrement;
-
-	// 套接字临时端口
-	private int[] socketPorts;
-
-	// 端口重用标记
-	private boolean reusePort;
-
-	// 自定义对外端口 -1表示不启用
-	private int outPorts;
-
-	public NetWorkType getNetworkType() {
+	@Override
+	/**
+	 * 获取网络连接类型
+	 * 
+	 * @return {@link NetWorkType}
+	 */
+	public NetType getNetType() {
 		return networkType;
 	}
 
-	public String[] getRequireIp() {
-		return requireIp;
+	@Nullable
+	/**
+	 * 获取组建集群的前置IP
+	 * 
+	 * @return
+	 */
+	public String[] getRequireNote() {
+		return requireNode;
 	}
 
-	public TcpIpNetWorkConfig setRequireIp(String... requireIp) {
-		this.requireIp = requireIp;
+	@Fluently
+	/**
+	 * 设置组建集群的前置IP
+	 * 
+	 * @param requireIp
+	 *            IP列表
+	 * @return
+	 */
+	public TcpIpNetWorkConfig setRequireNode(String... requireNode) {
+		this.requireNode = Objects.requireNonNull(requireNode);
 		return this;
 	}
 
-	public String[] getConnectIp() {
-		return connectIp;
+	/**
+	 * 获取当前连接节点
+	 * 
+	 * @return
+	 */
+	public String[] getConnectNode() {
+		return connectNode;
 	}
 
-	public TcpIpNetWorkConfig setConnectIp(String... connectIp) {
-		this.connectIp = connectIp;
+	@Fluently
+	/**
+	 * 设置要连接的节点服务器IP地址。
+	 * 
+	 * @param connectIp
+	 *            连接的IP清单
+	 * @return
+	 */
+	public TcpIpNetWorkConfig setConnectNode(String... connectNode) {
+		this.connectNode = Objects.requireNonNull(connectNode);
 		return this;
 	}
 
+	/**
+	 * 获取连接超时时间
+	 * 
+	 * @return
+	 */
 	public int getConnectTimeOut() {
-		return connectTimeOut;
+		return connectTimout;
 	}
 
-	public TcpIpNetWorkConfig setConnectTimeOut(int connectTimeOut) {
-		this.connectTimeOut = connectTimeOut;
-		return this;
-	}
-
-	public String getPublicAddress() {
-		return publicAddress;
-	}
-
-	public TcpIpNetWorkConfig setPublicAddress(String publicAddress) {
-		this.publicAddress = publicAddress;
-		return this;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public TcpIpNetWorkConfig setPort(int port) {
-		this.port = port;
-		return this;
-	}
-
-	public int getPortCount() {
-		return portCount;
-	}
-
-	public TcpIpNetWorkConfig setPortCount(int portCount) {
-		this.portCount = portCount;
-		return this;
-	}
-
-	public boolean isPortIncrement() {
-		return portIncrement;
-	}
-
-	public TcpIpNetWorkConfig setPortIncrement(boolean portIncrement) {
-		this.portIncrement = portIncrement;
-		return this;
-	}
-
-	public int[] getSocketPorts() {
-		return socketPorts;
-	}
-
-	public TcpIpNetWorkConfig setSocketPorts(int... socketPorts) {
-		this.socketPorts = socketPorts;
-		return this;
-	}
-
-	public boolean isReusePort() {
-		return reusePort;
-	}
-
-	public TcpIpNetWorkConfig setReusePort(boolean reusePort) {
-		this.reusePort = reusePort;
-		return this;
-	}
-
-	public int getOutPorts() {
-		return outPorts;
-	}
-
-	public TcpIpNetWorkConfig setOutPorts(int outPorts) {
-		this.outPorts = outPorts;
+	@Fluently
+	/**
+	 * 设置连接超时时间
+	 * 
+	 * @param connectTimout
+	 *            连接超时时间，单位MS。
+	 * @return
+	 */
+	public TcpIpNetWorkConfig setConnectTimout(int connectTimout) {
+		if (1 > connectTimout) {
+			throw new IllegalArgumentException("portCount must be greater than 1");
+		}
+		this.connectTimout = connectTimout;
 		return this;
 	}
 }

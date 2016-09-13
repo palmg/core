@@ -25,6 +25,10 @@ import com.palmg.utility.annotation.Fluently;
 public class IocConfig {
 	
 	private List<String> springXmlPaths;//spring的加载路径
+	
+	public IocConfig(){
+		this.springXmlPaths = Arrays.asList("configs/ioc/default/ioc-default.xml");
+	}
 
 	/**
 	 * 获取当前spring的启动路径

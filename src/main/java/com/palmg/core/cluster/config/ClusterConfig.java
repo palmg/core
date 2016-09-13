@@ -12,18 +12,26 @@
  */
 package com.palmg.core.cluster.config;
 
+import java.util.Objects;
+
+import com.palmg.utility.annotation.Fluently;
+
 /**
  * 集群相关配置
  * 
  * @author chkui
  */
 public class ClusterConfig {
-	private boolean enabled;// 集群启停标识
+	private boolean enabled = false;// 集群启停标识
 
-	private NetWorkConfig netWorkConfig; // 组网相关配置
+	private NetConfig netConfig; // 组网相关配置
+
+	public ClusterConfig() {
+		netConfig = new TcpIpNetWorkConfig();// 默认使用TCP/IP连接
+	}
 
 	/**
-	 * 判断是否启用集群
+	 * 判断是否启用集群，默认值为false
 	 * 
 	 * @return [true|false] 启用|停用
 	 */
@@ -31,6 +39,7 @@ public class ClusterConfig {
 		return enabled;
 	}
 
+	@Fluently
 	/**
 	 * 设置是否启用集群
 	 * 
@@ -48,18 +57,20 @@ public class ClusterConfig {
 	 * 
 	 * @return {@link NetWorkConfig}
 	 */
-	public NetWorkConfig getNetWorkConfig() {
-		return netWorkConfig;
+	public NetConfig getNetConfig() {
+		return netConfig;
 	}
 
+	@Fluently
 	/**
 	 * 设置集群网络相关配置
 	 * 
-	 * @param {@link NetWorkConfig}
+	 * @param {@link
+	 * 			NetWorkConfig}
 	 * @return {@link ClusterConfig}
 	 */
-	public ClusterConfig setNetWorkConfig(NetWorkConfig netWorkConfig) {
-		this.netWorkConfig = netWorkConfig;
+	public ClusterConfig setNetConfig(NetConfig netConfig) {
+		this.netConfig = Objects.requireNonNull(netConfig);
 		return this;
 	}
 }

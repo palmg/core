@@ -32,7 +32,6 @@ public interface Palmg{
 
 	public static Palmg build() {
 		AaronConfigure config = AaronConfigure.Instance;
-		config.setCluster(false);// no cluster
 		return buildConfig(false, null, null);
 	}
 
@@ -53,9 +52,7 @@ public interface Palmg{
 	
 	static Palmg buildConfig(boolean isCluster, String[] springXmlPaths, PalmgConfig palmgConfig){
 		AaronConfigure config = AaronConfigure.Instance;
-		config.setCluster(isCluster);// no cluster
-		config.setSpringXmlPath(springXmlPaths);// 设置spring配置
-		
+		config.setPalmgConfig(palmgConfig);
 		return DefaultToolkitImpl.Instance;
 	}
 

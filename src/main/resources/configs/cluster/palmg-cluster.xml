@@ -57,7 +57,7 @@
 			<iteration-count>19</iteration-count>
 		</symmetric-encryption>
 	</network>
-	<partition-group enabled="false" />
+	<partition-group enabled="false" ></partition-group>
 	<executor-service name="default">
 		<pool-size>16</pool-size>
 		<queue-capacity>0</queue-capacity>
