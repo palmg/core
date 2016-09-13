@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.palmg.core.PalmgConfig;
 import com.palmg.core.bus.config.BusConfig;
 import com.palmg.core.bus.enums.BusRunType;
 import com.palmg.core.cluster.config.ClusterConfig;
@@ -28,7 +29,7 @@ public class PalmgConfigTest {
 
 	@Before
 	public void init() {
-		palmgConfig = new PalmgConfig();
+		palmgConfig = PalmgConfig.of();
 	}
 
 	@Test

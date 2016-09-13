@@ -4,15 +4,25 @@ import com.palmg.cluster.PalmgCluster;
 import com.palmg.core.Palmg;
 import com.palmg.core.bus.consumer.PalmgConsumer;
 import com.palmg.core.bus.publisher.PalmgPulisher;
-import com.palmg.core.cron.PalmgCron;
 import com.palmg.core.ioc.PalmgIoc;
+import com.palmg.core.util.PalmgUtil;
 
+/**
+ * 基础toolkit服务
+ * @author chenkui
+ */
 public enum DefaultToolkitImpl implements Palmg {
 	Instance;
 	private PalmgIoc ioc;
 
 	private DefaultToolkitImpl() {
-		ioc = PalmgIoc.build();
+		// 创建一个全局或者palmg内部容器
+		// 容器需要阻塞所有的并发请求，以保证ioc容器是一个单利
+		synchronized (DefaultToolkitImpl.class) {
+			if (null == ioc) {
+				ioc = PalmgIoc.build();
+			}
+		}
 	}
 
 	@Override
@@ -36,8 +46,8 @@ public enum DefaultToolkitImpl implements Palmg {
 	}
 
 	@Override
-	public PalmgCron getCron() {
-		return ioc.getBean(PalmgCron.class);
+	public PalmgUtil getUtil() {
+		return ioc.getBean(PalmgUtil.class);
 	}
 
 }

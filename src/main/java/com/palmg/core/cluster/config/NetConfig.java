@@ -17,8 +17,6 @@ import java.util.Objects;
 import com.palmg.utility.annotation.Fluently;
 import com.palmg.utility.annotation.Nullable;
 
-import io.netty.handler.codec.http.multipart.MemoryAttribute;
-
 /**
  * 网络配置接口配置
  * 

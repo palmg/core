@@ -14,7 +14,7 @@ package com.palmg.core.main;
 
 import java.util.Objects;
 
-import com.palmg.core.main.config.PalmgConfig;
+import com.palmg.core.PalmgConfig;
 import com.palmg.utility.annotation.Fluently;
 
 /**
@@ -26,6 +26,14 @@ public enum AaronConfigure {
 	Instance;
 
 	private PalmgConfig palmgConfig;// 设置全局配置
+
+	private AaronConfigure() {
+		synchronized (AaronConfigure.class) {
+			if (null == palmgConfig) {
+				palmgConfig = PalmgConfig.of();
+			}
+		}
+	}
 
 	/**
 	 * 设置全局配置

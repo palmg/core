@@ -14,20 +14,17 @@ package com.palmg.core.main.config;
 
 import java.util.Objects;
 
+import com.palmg.core.PalmgConfig;
 import com.palmg.core.bus.config.BusConfig;
 import com.palmg.core.cluster.config.ClusterConfig;
 import com.palmg.core.ioc.config.IocConfig;
 import com.palmg.utility.annotation.Fluently;
 
 /**
- * <h3>palmg配置对象</h3>
- * <p>
- * PalmgConfig中包含了所有的运行相关配置。其中包含集群配置、交互事件配置、容器配置。
- * </p>
- * 
+ * PalmgConfig接口的实现类。用于在运行时创建所有配置对象
  * @author chkui
  */
-public class PalmgConfig {
+public class DefRuntimeConfig implements PalmgConfig {
 	// 集群配置
 	private ClusterConfig clusterConfig;
 
@@ -37,7 +34,7 @@ public class PalmgConfig {
 	// 容器配置
 	private IocConfig iocConfig;
 
-	public PalmgConfig() {
+	public DefRuntimeConfig() {
 		iocConfig = new IocConfig();// 创建容器配置
 
 		busConfig = new BusConfig();// 创建总线配置
@@ -45,64 +42,32 @@ public class PalmgConfig {
 		clusterConfig = new ClusterConfig();// 创建集群配置
 	}
 
-	/**
-	 * 获取集群配置
-	 * 
-	 * @return {@link ClusterConfig}
-	 */
+	// 获取集群配置
 	public ClusterConfig getClusterConfig() {
 		return clusterConfig;
 	}
 
 	@Fluently
-	/**
-	 * 替换集群配置
-	 * 
-	 * @param {@link ClusterConfig}
-	 * @return {@link PalmgConfig}
-	 */
+	// 设置集群配置
 	public PalmgConfig setClusterConfig(ClusterConfig clusterConfig) {
 		this.clusterConfig = Objects.requireNonNull(clusterConfig);
 		return this;
 	}
 
-	/**
-	 * 获取总线配置
-	 * 
-	 * @return {@link BusConfig}
-	 */
 	public BusConfig getBusConfig() {
 		return busConfig;
 	}
 
 	@Fluently
-	/**
-	 * 替换传输总线配置
-	 * 
-	 * @param {@link BusConfig}
-	 * @return {@link PalmgConfig}
-	 */
 	public PalmgConfig setBusConfig(BusConfig busConfig) {
 		this.busConfig = Objects.requireNonNull(busConfig);
 		return this;
 	}
 
-	/**
-	 * 获取容器相关配置
-	 * 
-	 * @return {@link IocConfig}
-	 */
 	public IocConfig getIocConfig() {
 		return iocConfig;
 	}
 
-	@Fluently
-	/**
-	 * 设置容器相关配置
-	 * 
-	 * @param {@link IocConfig}
-	 *            
-	 */
 	public PalmgConfig setIocConfig(IocConfig iocConfig) {
 		this.iocConfig = Objects.requireNonNull(iocConfig);
 		return this;

@@ -15,7 +15,7 @@ package com.palmg.core.ioc;
 import com.palmg.core.ioc.impl.DefaultLocalSpringIocWrapper;
 
 /**
- * <3>IOC容器接口</h3>
+ * <h3>IOC容器接口</h3>
  * 
  * @author chkui
  */

@@ -10,26 +10,32 @@
  * You may elect to redistribute this code under this licenses and copyright.
  * ------------------------------------------------------
  */
-package com.palmg.core.cron;
+package com.palmg.core.util;
 
 /**
- * <p>设置Palmg定时任务的接口</p>
+ * <p>Palmg的工具组件</p>
  * 
  * @author chkui
  */
-public interface PalmgCron {
+public interface PalmgUtil {
 
 	/**
-	 * 执行定时执行
+	 * 根据指定的时间周期定期执行一项任务
 	 * 
 	 * @return
 	 */
-	PalmgCron periodic();
+	PalmgUtil periodic();
 
 	/**
-	 * 延迟执行
+	 * 根据制定的时间延迟执行一项任务
 	 * 
 	 * @return
 	 */
-	PalmgCron timer();
+	PalmgUtil timer();
+	
+	/**
+	 * 执行一个独立线程，该线程会使用workPool中的线程来执行
+	 * @return
+	 */
+	PalmgUtil workThread();
 }
