@@ -15,6 +15,8 @@ package com.palmg.core.main;
 import java.util.Objects;
 
 import com.palmg.core.PalmgConfig;
+import com.palmg.core.main.config.PropertiesSysConfig;
+import com.palmg.core.main.config.SysConfig;
 import com.palmg.utility.annotation.Fluently;
 
 /**
@@ -26,11 +28,14 @@ public enum AaronConfigure {
 	Instance;
 
 	private PalmgConfig palmgConfig;// 设置全局配置
+	
+	private SysConfig sysConfig;
 
 	private AaronConfigure() {
 		synchronized (AaronConfigure.class) {
 			if (null == palmgConfig) {
 				palmgConfig = PalmgConfig.of();
+				sysConfig = new PropertiesSysConfig();
 			}
 		}
 	}
@@ -42,6 +47,14 @@ public enum AaronConfigure {
 	 */
 	public PalmgConfig getPalmgConfig() {
 		return palmgConfig;
+	}
+	
+	/**
+	 * 获取系统配置参数
+	 * @return
+	 */
+	public SysConfig getSysConfig(){
+		return sysConfig;
 	}
 
 	@Fluently

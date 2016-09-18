@@ -22,9 +22,14 @@ import com.palmg.utility.annotation.Fluently;
  * @author chkui
  */
 public class ClusterConfig {
+	
+	public static final String GROUP_NAME = "palmg";
+	
 	private boolean enabled = false;// 集群启停标识
 
 	private NetConfig netConfig; // 组网相关配置
+	
+	private String groupName = GROUP_NAME; // 分组名称
 
 	public ClusterConfig() {
 		netConfig = new NetConfig();// 默认使用TCP/IP连接
@@ -72,5 +77,24 @@ public class ClusterConfig {
 	public ClusterConfig setNetConfig(NetConfig netConfig) {
 		this.netConfig = Objects.requireNonNull(netConfig);
 		return this;
+	}
+
+	/**
+	 * 获取集群分组名称
+	 * @return
+	 */
+	public String getGroupName() {
+		return groupName;
+	}
+
+	/**
+	 * 设置集群分组名称
+	 * <p>
+	 * 集群分组用于隔离集群。不同组的集群节点不能相互发现
+	 * </p>
+	 * @param groupName
+	 */
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 }

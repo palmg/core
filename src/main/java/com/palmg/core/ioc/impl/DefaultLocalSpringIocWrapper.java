@@ -16,41 +16,54 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.palmg.core.ioc.PalmgIoc;
-import com.palmg.core.main.config.DefaultConf;
-import com.palmg.utility.properties.PropertiesLoadUtil;
+import com.palmg.core.main.AaronConfigure;
 
 /**
  * <h3>spring容器包裹类</h3>
+ * 
  * @author chkui
  */
-public class DefaultLocalSpringIocWrapper implements PalmgIoc {
+public enum DefaultLocalSpringIocWrapper implements PalmgIoc {
+	Instance;
 	private static final Logger LOG = LoggerFactory.getLogger(DefaultLocalSpringIocWrapper.class);
 
 	private ApplicationContext springContext;
 
-	public DefaultLocalSpringIocWrapper() {
-		build(Optional.<String> empty());
+	// 用于标记是否已经开始初始化
+	private boolean hasInit = false;
+
+	public PalmgIoc build() {
+		build(Optional.<String>empty());
+		return this;
 	}
 
-	public DefaultLocalSpringIocWrapper(final String springXmlPath) {
+	public PalmgIoc build(final String springXmlPath) {
 		build(Optional.of(springXmlPath));
+		return this;
 	}
 
 	private void build(final Optional<String> option) {
-		final String defloadPath = Optional.of(PropertiesLoadUtil.classPathLoad(DefaultConf.DEF_CONFIG_PROPERTIES_PATH))// 读取properties
-				.map(p -> p.getProperty("default.spring.loadPath"))// 读取配置路径加载字符串
-				.get();
-
-		if (option.isPresent()) {
-			springContext = new ClassPathXmlApplicationContext(option.get(), defloadPath);
-		} else {
-			springContext = new ClassPathXmlApplicationContext(defloadPath);
+		if (!hasInit) {
+			synchronized (this) {
+				if (!hasInit) {
+					hasInit = true;
+					final String defloadPath = AaronConfigure.Instance.getSysConfig().getSpringXmlPath();
+					if (option.isPresent()) {
+						springContext = new ClassPathXmlApplicationContext(option.get(), defloadPath);
+					} else {
+						springContext = new ClassPathXmlApplicationContext(defloadPath);
+					}
+					LOG.debug("Init sping context success!");
+				}
+			}
 		}
-		LOG.debug("Init sping context success!");
 	}
 
 	@Override
@@ -70,31 +83,39 @@ public class DefaultLocalSpringIocWrapper implements PalmgIoc {
 
 	@Override
 	public <T> T addBean(Class<T> clazz) {
-		// TODO Auto-generated method stub
-		return null;
+		return addBean(clazz.getName(), clazz);
 	}
 
 	@Override
 	public <T> T addBean(String beanName, Class<T> clazz) {
-		// TODO Auto-generated method stub
-		return null;
+		//使用BeanFactory构建一个新增bean的方法
+		DefaultListableBeanFactory beanFactory = getBeanFactory();
+		if (!beanFactory.containsBean(beanName)) {
+			BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
+			builder.setScope("singleton");
+			beanFactory.registerBeanDefinition(beanName, builder.getBeanDefinition());
+		}
+		return springContext.getBean(beanName, clazz);
 	}
 
 	@Override
 	public boolean containBean(String beanName) {
-		// TODO Auto-generated method stub
-		return false;
+		return springContext.containsBean(beanName);
 	}
 
 	@Override
 	public int containBean(Class<?> clazz) {
-		// TODO Auto-generated method stub
-		return 0;
+		return Optional.ofNullable(springContext.getBeanNamesForType(clazz)).map(list -> list.length).orElse(0);
 	}
 
 	@Override
 	public void destroyBean(Object instance) {
-		// TODO Auto-generated method stub
+		DefaultListableBeanFactory beanFactory = getBeanFactory();
+		beanFactory.destroyBean(instance);
+	}
 
+	//将当年前的springContext转换成BeanFactory的实现类
+	private DefaultListableBeanFactory getBeanFactory() {
+		return DefaultListableBeanFactory.class.cast(ConfigurableApplicationContext.class.cast(springContext));
 	}
 }

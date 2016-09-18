@@ -15,20 +15,23 @@ package com.palmg.core.main.vertx;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 
+import com.palmg.core.bus.config.BusConfig;
 import com.palmg.core.bus.consumer.config.ConsumerOptions;
 import com.palmg.core.bus.consumer.config.SendOptions;
+import com.palmg.core.cluster.config.ClusterConfig;
+import com.palmg.core.cluster.impl.HazelcastClusterWrapperImpl;
+import com.palmg.core.main.AaronConfigure;
 import com.palmg.core.main.AaronKernel;
-import com.palmg.core.main.annotation.Assembly;
 import com.palmg.utility.async.Callback;
 import com.palmg.utility.async.CallbackResult;
 import com.palmg.utility.async.Msg;
@@ -36,13 +39,14 @@ import com.palmg.utility.async.Msg;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 
-@Assembly
+@Named
 @Lazy(false)
 /**
- * <h3>Vertx的包装实现类，对外提供所有的Vertx的基础功能</h3>
+ * <h3>AaronKernel implements</h3>
  * <p>
- * 
+ * Use Vertx as a Wrapper.This class user Vertx as a kernel.
  * </p>
  * 
  * @author chkui
@@ -52,21 +56,59 @@ public final class VertxCoreWrapperKernel implements AaronKernel {
 
 	private Vertx vertx;
 
+	@Inject
+	private ClusterConfig clusterConfig;
+
 	@PostConstruct
 	public void init() {
-		CompletableFuture<Void> future = new CompletableFuture<>();
-		new Thread(() -> {
-			vertx = Vertx.vertx();
-			future.complete(null);
-		}).start();
-		try {
-			future.get(5, TimeUnit.SECONDS);
-		} catch (InterruptedException | ExecutionException | TimeoutException e) {
-			LOG.error("init vertx error!", e);
-		}
-
+		// build vertx
+		vertxBuild();
+		// we must deploy one verticle befor，otherwise palmg will be terminal.
 		vertx.deployVerticle(new AbstractVerticle() {
 		});
+	}
+
+	private void vertxBuild() {
+		try {
+			// get the configure.
+			ClusterConfig cluster = clusterConfig;
+			final BusConfig busConfig = AaronConfigure.Instance.getPalmgConfig().getBusConfig();
+			VertxOptions options = new VertxOptions();
+
+			// eventbus configure
+			options.setEventLoopPoolSize(busConfig.getCoreThreadPoolSize())
+					.setWorkerPoolSize(busConfig.getWorkerThreadPoolSize())
+					.setInternalBlockingPoolSize(busConfig.getInternalBlockingPoolSize())
+					.setBlockedThreadCheckInterval(busConfig.getCoreThreadBlockedCheckInterval())
+					.setMaxEventLoopExecuteTime(busConfig.getMaxCoreThreadExecuteTime())
+					.setMaxWorkerExecuteTime(busConfig.getMaxWorkerThreadExecuteTime())
+					.setWarningExceptionTime(busConfig.getWarningExceptionTime());
+
+			if (cluster.isEnabled()) {// use cluster
+				options.setClustered(true);
+				CompletableFuture<Void> future = new CompletableFuture<>();
+				// user hazelcast to create cluster
+				HazelcastClusterWrapperImpl.Instance.getHazelcastCluster();
+
+				Vertx.clusteredVertx(options, result -> {
+					if (result.failed()) {
+						LOG.error("Init cluster error! Terminate palmg", result.cause());
+						future.completeExceptionally(result.cause());
+					} else {
+						vertx = result.result();
+						future.complete(null);
+					}
+				});
+				future.get(10, TimeUnit.SECONDS);
+			} else {// default
+				vertx = Vertx.vertx(options.setClustered(false));
+			}
+		} catch (Throwable t) {
+			LOG.error("create palmg kernel error! Terminate", t);
+			// if create vertx instance error then terminate palmg.
+			// because we can not provide any toolkit without vertx.
+			System.exit(0);
+		}
 	}
 
 	@Override

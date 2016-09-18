@@ -12,7 +12,7 @@ import com.palmg.core.bus.enums.BusRunType;
 import com.palmg.core.cluster.config.ClusterConfig;
 import com.palmg.core.cluster.config.MulticastConfig;
 import com.palmg.core.cluster.config.NetConfig;
-import com.palmg.core.cluster.config.TcpIpConfig;
+import com.palmg.core.cluster.config.TcpConfig;
 import com.palmg.core.ioc.config.GuiceIocConfig;
 import com.palmg.core.ioc.config.IocConfig;
 import com.palmg.core.ioc.config.SpringIocConfig;
@@ -66,9 +66,9 @@ public class PalmgConfigTest {
 		Assert.assertNull(netConfig.getInterfaces());
 		Assert.assertNull(netConfig.getPublicAddress());
 
-		TcpIpConfig tcpIpConfig = netConfig.getTcpIpConfig();
-		Assert.assertEquals(TcpIpConfig.CONNECT_TIMEOUT, tcpIpConfig.getConnectTimeOut());
-		Assert.assertEquals(Arrays.asList(TcpIpConfig.CONNECT_NODE), Arrays.asList(tcpIpConfig.getConnectNode()));
+		TcpConfig tcpIpConfig = netConfig.getTcpConfig();
+		Assert.assertEquals(TcpConfig.CONNECT_TIMEOUT, tcpIpConfig.getConnectTimeOut());
+		Assert.assertEquals(Arrays.asList(TcpConfig.CONNECT_NODE), Arrays.asList(tcpIpConfig.getConnectNode()));
 		
 		MulticastConfig multicastConfig = netConfig.getMulticastConfig();
 		Assert.assertNotNull(multicastConfig);

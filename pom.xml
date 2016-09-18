@@ -50,12 +50,17 @@
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+		</dependency>
+
 		<!-- healcast -->
 		<dependency>
 			<groupId>com.hazelcast</groupId>
 			<artifactId>hazelcast</artifactId>
 		</dependency>
-		
+
 		<!-- test unit -->
 		<dependency>
 			<groupId>junit</groupId>

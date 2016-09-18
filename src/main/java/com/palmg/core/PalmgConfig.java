@@ -69,6 +69,7 @@ public interface PalmgConfig {
 	 * @return
 	 */
 	public static PalmgConfig of(){
+		// 构造一个默认的基础配置类
 		return new DefRuntimeConfig();
 	}
 	

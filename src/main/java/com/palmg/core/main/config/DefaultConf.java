@@ -17,19 +17,33 @@ package com.palmg.core.main.config;
  * @author chkui
  */
 public class DefaultConf {
-	/**
-	 * 全局默认propertis文件classpath路径:
-	 * {@value}
-	 */
-	final public static String DEF_CONFIG_PROPERTIES_PATH = "configs/default_conf.properties";
 	
 	/**
 	 * 标识未定义字符串:{@value}
 	 */
-	final public static String DEF_TAG_STRING_NULL= "NaNEOF";
+	final public static String STRING_NULL= "NaNEOF";
+	/**
+	 * 标识全局通用的逗号:{@value}
+	 */
+	final public static String STRING_COMMA = ",";
 	
 	/**
-	 * 未定义数字
+	 * 未定义数字:{@value}
 	 */
-	final public static int DEF_TAG_NUMBER_NULL = -1;
+	final public static int NUMBER_NULL = -1;
+	
+	/**
+	 * ioc容器的配置名称{@value}
+	 */
+	final public static String CONFIG_NAME_IOC = "default-ioc-config";
+
+	/**
+	 * bus在容器中的配置名称{@value}
+	 */
+	final public static String CONFIG_NAME_BUS = "default-bus-config";
+	
+	/**
+	 * cluster在容器中的配置名称{@value}
+	 */
+	final public static String CONFIG_NAME_CLUSTER = "default-cluster-config";
 }

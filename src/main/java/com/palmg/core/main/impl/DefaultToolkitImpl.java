@@ -5,6 +5,7 @@ import com.palmg.core.Palmg;
 import com.palmg.core.bus.consumer.PalmgConsumer;
 import com.palmg.core.bus.publisher.PalmgPulisher;
 import com.palmg.core.ioc.PalmgIoc;
+import com.palmg.core.ioc.factory.PalmIocFactory;
 import com.palmg.core.util.PalmgUtil;
 
 /**
@@ -20,7 +21,7 @@ public enum DefaultToolkitImpl implements Palmg {
 		// 容器需要阻塞所有的并发请求，以保证ioc容器是一个单利
 		synchronized (DefaultToolkitImpl.class) {
 			if (null == ioc) {
-				ioc = PalmgIoc.build();
+				ioc = PalmIocFactory.build();
 			}
 		}
 	}

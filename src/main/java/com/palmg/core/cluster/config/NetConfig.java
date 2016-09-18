@@ -65,7 +65,7 @@ public class NetConfig {
 	private NetType netType = NetType.TcpIp;
 
 	// tcp/ip配置
-	private TcpIpConfig tcpIpConfig;
+	private TcpConfig tcpConfig;
 
 	// 组播协议配置
 	private MulticastConfig multicastConfig;
@@ -92,10 +92,10 @@ public class NetConfig {
 	private String publicAddress;
 
 	// 对外接口
-	private int[] interfaces;
+	private String[] interfaces;
 
 	public NetConfig() {
-		this.tcpIpConfig = new TcpIpConfig();
+		this.tcpConfig = new TcpConfig();
 		this.multicastConfig = new MulticastConfig();
 	}
 
@@ -104,7 +104,7 @@ public class NetConfig {
 	 * 
 	 * @return {@link NetWorkType}
 	 */
-	public NetType getNetType() {
+	public @Fluently NetType getNetType() {
 		return this.netType;
 	};
 
@@ -114,7 +114,7 @@ public class NetConfig {
 	 * @param netType
 	 * @return {@link NetConfig}
 	 */
-	public NetConfig setNetType(NetType netType) {
+	public @Fluently NetConfig setNetType(NetType netType) {
 		// TODO 目前支持Tcp/Ip模式
 		// this.netType = Objects.requireNonNull(netType);
 		return this;
@@ -125,8 +125,8 @@ public class NetConfig {
 	 * 
 	 * @return {@link TcpIpNetConfig}
 	 */
-	public TcpIpConfig getTcpIpConfig() {
-		return tcpIpConfig;
+	public TcpConfig getTcpConfig() {
+		return tcpConfig;
 	}
 
 	/**
@@ -136,8 +136,8 @@ public class NetConfig {
 	 * 			TcpIpNetConfig}
 	 * @return {@link NetConfig}
 	 */
-	public NetConfig setTcpIpConfig(TcpIpConfig tcpIpConfig) {
-		this.tcpIpConfig = Objects.requireNonNull(tcpIpConfig);
+	public @Fluently NetConfig setTcpConfig(TcpConfig tcpConfig) {
+		this.tcpConfig = Objects.requireNonNull(tcpConfig);
 		return this;
 	}
 
@@ -150,7 +150,6 @@ public class NetConfig {
 		return multicastConfig;
 	}
 
-	@Fluently
 	/**
 	 * 设置组播协议相关配置
 	 * 
@@ -158,7 +157,7 @@ public class NetConfig {
 	 * 			MulticastConfig}
 	 * @return {@link NetConfig}
 	 */
-	public NetConfig setMulticastConfig(MulticastConfig multicastConfig) {
+	public @Fluently NetConfig setMulticastConfig(MulticastConfig multicastConfig) {
 		this.multicastConfig = Objects.requireNonNull(multicastConfig);
 		return this;
 	}
@@ -172,7 +171,6 @@ public class NetConfig {
 		return pingInterval;
 	}
 
-	@Fluently
 	/**
 	 * 设置集群节点之间的心跳间隔时间，单位ms
 	 * 
@@ -180,7 +178,7 @@ public class NetConfig {
 	 *            心跳间隔时间
 	 * @return this
 	 */
-	public NetConfig setPingInterval(final long pingInterval) {
+	public @Fluently NetConfig setPingInterval(final long pingInterval) {
 		if (1 > pingInterval) {
 			throw new IllegalArgumentException("pingInterval must be greater than 0");
 		}
@@ -197,7 +195,6 @@ public class NetConfig {
 		return pingReplyInterval;
 	}
 
-	@Fluently
 	/**
 	 * 设置集群心跳回复等待时间，单位ms
 	 * 
@@ -205,7 +202,7 @@ public class NetConfig {
 	 *            等待心跳回复的等待时间，ms
 	 * @return this
 	 */
-	public NetConfig setPingReplyInterval(final long pingReplyInterval) {
+	public @Fluently NetConfig setPingReplyInterval(final long pingReplyInterval) {
 		if (1 > pingInterval) {
 			throw new IllegalArgumentException("pingReplyInterval must be greater than 0");
 		}
@@ -222,7 +219,6 @@ public class NetConfig {
 		return port;
 	}
 
-	@Fluently
 	/**
 	 * 设置集群的对外端口。这个端口是集群之间用于相互发现的端口（握手）。当握手成功以后，会使用websocket通信。
 	 * 当portCount设置大于1并且portIncrement设置为true时，集群会在指定的端口范围内查找可用端口（范围port +
@@ -231,7 +227,7 @@ public class NetConfig {
 	 * @param port
 	 *            要设置的端口值
 	 */
-	public NetConfig setPort(final int port) {
+	public @Fluently NetConfig setPort(final int port) {
 		if (1 > port) {
 			throw new IllegalArgumentException("port must be greater than 0");
 		}
@@ -248,13 +244,12 @@ public class NetConfig {
 		return portCount;
 	}
 
-	@Fluently
 	/**
 	 * 设置端口增量
 	 * 
 	 * @param portCount
 	 */
-	public NetConfig setPortCount(final int portCount) {
+	public @Fluently NetConfig setPortCount(final int portCount) {
 		if (0 > portCount) {
 			throw new IllegalArgumentException("portCount must be greater than -1");
 		}
@@ -278,7 +273,7 @@ public class NetConfig {
 	 *            增量大小，系统会在 port + portCount的范围内寻找为被使用的端口
 	 * @return
 	 */
-	public NetConfig setPortIncrement(final boolean portIncrement) {
+	public @Fluently NetConfig setPortIncrement(final boolean portIncrement) {
 		this.portIncrement = portIncrement;
 		return this;
 	}
@@ -298,18 +293,17 @@ public class NetConfig {
 	 * 
 	 * @param reusePort
 	 */
-	public NetConfig setReusePort(final boolean reusePort) {
+	public @Fluently NetConfig setReusePort(final boolean reusePort) {
 		this.reusePort = reusePort;
 		return this;
 	}
 
-	@Nullable
 	/**
 	 * 设置公网地址，默认值为null
 	 * 
 	 * @return
 	 */
-	public String getPublicAddress() {
+	public @Nullable String getPublicAddress() {
 		return publicAddress;
 	}
 
@@ -319,17 +313,17 @@ public class NetConfig {
 	 * 
 	 * @param publicAddress
 	 */
-	public void setPublicAddress(final String publicAddress) {
+	public @Fluently NetConfig setPublicAddress(final String publicAddress) {
 		this.publicAddress = Objects.requireNonNull(publicAddress);
+		return this;
 	}
 
-	@Nullable
 	/**
 	 * 获取对外端口，默认值为null
 	 * 
 	 * @return
 	 */
-	public int[] getInterfaces() {
+	public @Nullable String[] getInterfaces() {
 		return interfaces;
 	}
 
@@ -344,7 +338,7 @@ public class NetConfig {
 	 * 
 	 * @param interfaces
 	 */
-	public NetConfig setInterfaces(int... interfaces) {
+	public @Fluently NetConfig setInterfaces(String... interfaces) {
 		this.interfaces = Objects.requireNonNull(interfaces);
 		return this;
 	};

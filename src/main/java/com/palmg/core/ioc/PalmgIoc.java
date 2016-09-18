@@ -12,19 +12,16 @@
  */
 package com.palmg.core.ioc;
 
-import com.palmg.core.ioc.impl.DefaultLocalSpringIocWrapper;
-
 /**
  * <h3>IOC容器接口</h3>
+ * <p>
+ * IOC容器接口提供了容器操作的通用功能。
  * 
+ * </p>
  * @author chkui
  */
 public interface PalmgIoc {
 
-	public static PalmgIoc build(){
-		return new DefaultLocalSpringIocWrapper();
-	}
-	
 	Object getBean(String beanName);
 
 	<T> T getBean(Class<T> beanType);
